@@ -1,0 +1,140 @@
+id: x-g-0-ghclaw-landing
+
+data:
+  - name:
+      en: overview
+      cn: 概览
+    qa:
+      - id: what-is-ghclaw
+        question:
+          en: What is ghclaw?
+          cn: 什么是 ghclaw？
+        answer:
+          en: A folder-based event listener pattern for GitHub events. Watches a folder for event files, classifies them by event type (issue#comment, pr#opened, etc.), and routes them to AI-assisted handlers via x chat / x pi / x codex.
+          cn: 用于 GitHub 事件的基于文件夹的事件监听器模式。监听一个文件夹中的事件文件，按事件类型（issue#comment、pr#opened 等）分类，再通过 x chat / x pi / x codex 路由到 AI 辅助的处理器。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+          - docs/0-ghclaw-landing.cn.md
+
+      - id: what-is-claw-design
+        question:
+          en: What is a "claw design"?
+          cn: 什么是 "claw 设计"？
+        answer:
+          en: A four-piece pattern: watcher (polls / subscribes), classifier (turns raw events into typed envelopes), handlers (small per-event-type scripts), notifier (sends replies back to upstream). ghclaw is a concrete instance for GitHub events.
+          cn: 一个四件套模式：监听器（轮询 / 订阅）、分类器（把原始事件转为类型化信封）、处理器（每个事件类型一个的小脚本）、通知器（把回复发回上游）。ghclaw 是该模式在 GitHub 事件上的具体实例。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+      - id: who-is-it-for
+        question:
+          en: Who is ghclaw for?
+          cn: ghclaw 是给谁用的？
+        answer:
+          en: Anyone who wants AI-assisted GitHub triage / PR review without writing a server. Especially useful when you want one watcher for every event type and prefer debuggable file flow over event-loop boilerplate.
+          cn: 想要 AI 辅助 GitHub 分类 / PR 评审又不想写服务器的人。当你想用一个监听器处理每种事件类型，并偏好可调试的文件流而非事件循环样板时尤其有用。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+  - name:
+      en: how it works
+      cn: 工作原理
+    qa:
+      - id: folder-layout
+        question:
+          en: What does the watched folder look like?
+          cn: 被监听的文件夹长什么样？
+        answer:
+          en: watched/<owner>/<repo>/events/<ts>-<kind>-<id>.txt for incoming events; watched/<owner>/<repo>/replies/<ts>-reply.txt for replies. ghclaw parses the filename to classify the event.
+          cn: 输入事件用 watched/<owner>/<repo>/events/<ts>-<kind>-<id>.txt；回复用 watched/<owner>/<repo>/replies/<ts>-reply.txt。ghclaw 解析文件名来分类事件。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+      - id: event-types
+        question:
+          en: Which GitHub events does ghclaw recognize?
+          cn: ghclaw 识别哪些 GitHub 事件？
+        answer:
+          en: issue#created, issue#comment, issue#closed, pr#opened, pr#comment, pr#review, pr#merged, push, release, workflow_run, star, fork. Custom kinds supported via --on handlers.
+          cn: issue#created、issue#comment、issue#closed、pr#opened、pr#comment、pr#review、pr#merged、push、release、workflow_run、star、fork。通过 --on 处理器支持自定义类型。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+      - id: handler-types
+        question:
+          en: What can a handler be?
+          cn: 处理器可以是？
+        answer:
+          en: Plain shell, AI via x chat (general), AI via x pi (issue-triage), or AI via x codex (PR review-style). Handlers are just shell scripts that read the event and write a reply.
+          cn: 纯 shell、通过 x chat（通用）、通过 x pi（issue 分类）、或通过 x codex（PR 评审风格）的 AI。处理器就是读取事件并写回复的 shell 脚本。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+  - name:
+      en: usage
+      cn: 使用
+    qa:
+      - id: how-to-start
+        question:
+          en: How do I start ghclaw?
+          cn: 如何启动 ghclaw？
+        answer:
+          en: Forward GitHub webhooks into a watched folder (e.g. via a Cloudflare Worker), then run ghclaw run ./watched/ with --on flags per event kind. Run under systemd / tmux / supervisord / a container.
+          cn: 把 GitHub webhook 转发到被监听的文件夹（例如通过 Cloudflare Worker），然后跑 ghclaw run ./watched/ 并按事件类型加 --on 标志。在 systemd / tmux / supervisord / 容器下运行。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+      - id: custom-handlers
+        question:
+          en: Can I write custom handlers?
+          cn: 我能写自定义处理器吗？
+        answer:
+          en: Yes — handlers are plain shell scripts. Read the event from $1 or stdin, write the reply to stdout or to watched/<owner>/<repo>/replies/. Wire in with ghclaw run --on "<kind>" <script>.
+          cn: 能 —— 处理器就是纯 shell 脚本。从 $1 或 stdin 读取事件，把回复写到 stdout 或 watched/<owner>/<repo>/replies/。用 ghclaw run --on "<kind>" <script> 接入。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+      - id: notifications
+        question:
+          en: Where do replies go?
+          cn: 回复发到哪里？
+        answer:
+          en: Replies can flow back as GitHub comments (via the GitHub API), x weixin messages (WeChat), local queue / log writes, or webhook posts. Multiple channels can be combined per event type.
+          cn: 回复可以通过 GitHub 评论（通过 GitHub API）、x weixin 消息（微信）、本地队列 / 日志写入、或 webhook POST 发回。每个事件类型可组合多个通道。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+  - name:
+      en: limits
+      cn: 限制
+    qa:
+      - id: latency
+        question:
+          en: Is ghclaw real-time?
+          cn: ghclaw 是实时的吗？
+        answer:
+          en: No — ghclaw is folder-based. Latency is poll-interval or inotify-latency, not sub-second. For real-time needs, a webhook-direct handler is better.
+          cn: 不是 —— ghclaw 基于文件夹。延迟取决于轮询间隔或 inotify 延迟，不是亚秒级。需要实时性，直接的 webhook 处理器更好。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
+
+      - id: serverless
+        question:
+          en: Does ghclaw work on serverless platforms?
+          cn: ghclaw 能在无服务器平台上用吗？
+        answer:
+          en: Not directly — ghclaw assumes a persistent folder with a watcher process. Use a small VM / container / systemd service for the watcher; webhook forwarding can still be serverless.
+          cn: 不能直接 —— ghclaw 假定一个带监听器进程的持久文件夹。用小型 VM / 容器 / systemd 服务跑监听器；webhook 转发仍可以是无服务器。
+        confidence: 9
+        reference:
+          - docs/0-ghclaw-landing.en.md
